@@ -1,5 +1,3 @@
-package de.jo3rn.horstlchain;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

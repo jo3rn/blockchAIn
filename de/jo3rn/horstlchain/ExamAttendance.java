@@ -1,5 +1,3 @@
-package de.jo3rn.horstlchain;
-
 import java.time.LocalDate;
 
 public class ExamAttendance {
