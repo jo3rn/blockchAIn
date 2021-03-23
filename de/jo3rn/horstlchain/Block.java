@@ -13,15 +13,18 @@ public class Block {
     this.examAttendance = examAttendance;
     this.previousHash = previousHash;
 
-    this.hash = calculateHash();
-
     this.timestamp = ZonedDateTime
         .now(ZoneId.of("Europe/Paris"))
         .format(DateTimeFormatter.ofPattern("uuuu.MM.dd-HH:mm:ss"));
+
+    this.hash = calculateHash();
   }
 
   private String calculateHash() {
-    return "343950348920456843ß523157213589234573894534345t";
+    return Utils.getSha3256Hash(
+        examAttendance.toString()
+            + previousHash
+            + timestamp);
   }
 
   public static void main(String[] args) {

@@ -68,3 +68,110 @@ Here comes the trick: part of the data we put into the blender is the `previousH
 A block's resulting `hash` (identity) is therefore tied to its ancestor.
 Like we humans carry parts of our ancestors in us.
 What a beautiful thing.
+
+## The blender
+[Course video in German](https://www.youtube.com/watch?v=aD9CSmltrIU) (~17min)
+
+Obviously it is not a real blender that creates the `hash`.
+We rather rely on an ingenious cryptographic algorithm to produce a unique outcome.
+There are several algorithms available.
+In our project we will use one from the [SHA-3](https://en.wikipedia.org/wiki/SHA-3) family, namely SHA3-256.
+We don't need to get into the details of the algorithm, that's something for your cryptography or security class.
+Nevertheless, we should be aware of two of its features.
+To follow along, you can try out some hashing [here](https://www.browserling.com/tools/all-hashes).
+For example:
+```
+input:
+University of Applied Sciences Fulda
+
+SHA3-256 output (64 characters in hexadecimal):
+18a399ab855ef479c77820ac4155f3954835bc914e3f378844beb5e15a5317f8
+```
+
+It is noticeable that, no matter what input we are hashing, the SHA3-256 will always output a string with a **fixed length of 64**.
+This string consists of the characters `0-9` and `a-e`.
+It is the hexadecimal representation of a sequence of zeroes and ones with the length of 256.
+That's where the _256_ in SHA3-_256_ comes from.
+
+```
+SHA3-256 output (256 digits in binary):
+1100010100011100110011010101110000101010111101111010001111001110001110111100000100000101011000100000101010101111100111001010101001000001101011011110010010001010011100011111100110111100010000100010010111110101101011110000101011010010100110001011111111000
+```
+
+The algorithm has another exciting property.
+If we change the input just _slightly_, we will get a **completely different output**:
+```
+input:
+University of Applied Science Fulda
+
+SHA3-256 output (in hexadecimal):
+0db1827db07b5a4a2e75adfeb720df2af6115b68d4053c6803a6ce61b838abe2
+```
+
+Do you spot the difference? Yes, I omitted the trailing `s` in `Sciences` and the hash looks nothing like before.
+We will later see why these properties are important to us.
+First, let's look at the code.
+Don't worry if you don't fully get what is happening here.
+It will be explained below.
+
+```java
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+public class Utils {
+  public static String getSha3256Hash(String originalString) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+      byte[] encodedHash = digest.digest(
+          originalString.getBytes(StandardCharsets.UTF_8));
+      return bytesToHex(encodedHash);
+
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException();
+    }
+  }
+
+  private static String bytesToHex(byte[] hash) {
+    StringBuilder hexString = new StringBuilder(2 * hash.length);
+    for (int i = 0; i < hash.length; i++) {
+      String hex = Integer.toHexString(0xff & hash[i]);
+      if(hex.length() == 1) {
+        hexString.append('0');
+      }
+      hexString.append(hex);
+    }
+    return hexString.toString();
+  }
+}
+```
+So we have a `Utils` class here with two methods.
+Programmers often create this kind of classes to have helper methods at hand, e.g. to convert something into something else.
+The advantage of these `public static` methods is that we can call them from anywhere in our code.
+
+- `getSha3256Hash` turns an input string into a SHA3-256 hash
+- `bytesToHex` converts an array of `byte` values into a `String`
+
+To be honest, the standard Java class `MessageDigest` does the heavy lifting for us.
+All we need to know is, that we can call `getSha3256Hash` to get the `hash` of whatever we put as an argument.
+Considering our previous example:
+`Utils.getSha3256Hash("University of Applied Sciences Fulda")` will return `18a399ab855ef479c77820ac4155f3954835bc914e3f378844beb5e15a5317f8`.
+
+## The ingredients
+Now that we are equipped with a hash-puking method, we can start creating hashes.
+To achieve the blockchain's traceability and integrity, we mix everything we want to secure into the input.
+Back in our `Block` class we call our helper method in the method `calculateHash`:
+
+```java
+public class Block {
+  /* omitting parts of the code to highlight only the discussed parts */
+
+  public Block(ExamAttendance examAttendance, String previousHash) {
+    /* ... */
+    this.hash = calculateHash();
+  }
+  
+  private String calculateHash() {
+    return Utils.getSha3256Hash(examAttendance.toString() + previousHash + timestamp);
+  }
+}
+```
