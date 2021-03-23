@@ -35,3 +35,36 @@ Immutability is achieved by linking entries together (it is a _chain_ after all)
 One feature of it is requesting one's grades.
 We will create a blockchain that securely stores read-only grades of students and call it the horstlChain.
 We instantiate objects of the class `ExamAttendance` as our data points.
+
+## A closer look at blocks
+[Course video in German](https://www.youtube.com/watch?v=DVfkBAK8Rl4) (~14min)
+
+First, let us make things easier and only consider a single block.
+Think of it as one entry in the list of things we want to record.
+```java
+public class Block {
+  private ExamAttendance examAttendance;
+  private String hash;
+  private String previousHash;
+  private String timestamp;
+
+  /* omitting parts of the code to keep snippet brief */
+}
+```
+Wait, that is way more than just an exam attendance.
+
+Additionally, we have a `timestamp`, which is not a necessity but nice to have.
+Not only can we later trace the creation date of the block, but it also helps with checking consistency,
+e.g. a block later on in the chain could not have an earlier timestamp than any previous block.
+
+What helps even more with consistency is storing the `previousHash`, i.e. linking to the previous block.
+A `hash` is an (almost) unique identifier for a block, like a fingerprint.
+It is created by putting all the data of the block into a blender.
+
+![A blender starting to mix some liquid](https://media.giphy.com/media/3o6wrFg0YiMbZqkf2E/giphy.gif)
+
+The result is a long row of zeroes and ones.
+Here comes the trick: part of the data we put into the blender is the `previousHash`, meaning the hash of the predecessor block.
+A block's resulting `hash` (identity) is therefore tied to its ancestor.
+Like we humans carry parts of our ancestors in us.
+What a beautiful thing.
