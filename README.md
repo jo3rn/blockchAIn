@@ -52,8 +52,9 @@ public class Block {
 }
 ```
 Wait, that is way more than just an exam attendance.
+Well yes. Otherwise, we wouldn't need an additional class :)
 
-Additionally, we have a `timestamp`, which is not a necessity but nice to have.
+One attribute is the `timestamp`, which is not a necessity but nice to have.
 Not only can we later trace the creation date of the block, but it also helps with checking consistency,
 e.g. a block later on in the chain could not have an earlier timestamp than any previous block.
 
@@ -175,3 +176,48 @@ public class Block {
   }
 }
 ```
+
+## Connect the ~~dots~~ blocks
+[Course video in German](https://www.youtube.com/watch?v=4ltNm4nwyr8) (~15min)
+
+It's time to get the ball rolling by building our chain.
+You might have guessed what that means.
+We need another class: the `HorstlChain`.
+Its main task is to manage blocks (add and read).
+Two attributes help to achieve this:
+
+```java
+public class HorstlChain {
+  private Block[] horstlChain;
+  private int currentIndex = 0;
+  /* ... */
+}
+```
+The `horstlChain` array stores the blocks.
+`currentIndex` records the position of the latest block within the array.
+
+When we give birth to our blockchain by calling the constructor, we initialize the array with a length and put the first (genesis) block into the array:
+
+```java
+public HorstlChain(ExamAttendance examAttendance) {
+  horstlChain = new Block[100];
+  horstlChain[0] = new Block(examAttendance, "genesis");
+}
+```
+
+> A caveat with this implementation is that the size of the blockchain is fixed (in this case to 100 elements).
+> However, if we reach that limit we can always create a larger array to which we transfer the content of the smaller array.
+
+Afterwards we can add further blocks with the `addBlock` method.
+Here we retrieve the hash of the latest block to use it as the `previousHash`.
+
+```java
+private void addBlock(ExamAttendance examAttendance) {
+    String previousHash = horstlChain[currentIndex].getHash();
+    horstlChain[++currentIndex] = new Block(examAttendance, previousHash);
+  }
+```
+
+So far we have only done simple array manipulations.
+No trace of the promises of blockchain technology: easy to verify but difficult to change.
+Remember the hashes? Now it is their time to shine.

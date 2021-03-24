@@ -39,6 +39,10 @@ public class Block {
     System.out.println(block);
   }
 
+  public String getHash() {
+    return this.hash;
+  }
+
   @Override
   public String toString() {
     return "Block{" +
