@@ -164,6 +164,33 @@ May the force be with you! ->  Hashfunktion  ->  13bc8533
 				</section>
 
 				<section>
+					<h3>Verifizierung</h3>
+					<pre><code class="nohighlight">
+      _____________________________
+   .--> hash                      |    horstlChain[0]
+   |  |___________________________|
+   =                |
+   |  ______________|______________
+   `--> previousHash              |
+      |                           |
+      |                           |    horstlChain[1]
+   .--> hash                      |
+   |  |___________________________|
+   =                |
+   |  ______________|______________
+   `--> previousHash              |
+      |                           |
+      |                           |    horstlChain[2]
+   .--> hash                      |
+   |  |___________________________|
+   .                |
+   .                |
+                    .
+                    .
+					</code></pre>
+				</section>
+
+				<section>
 					<h3>Proof of Work</h3>
 					<p>schwere Aufgabe mit leicht verifizierbarer Lösung</p>
 					<p>Beispiel: <a href="https://en.bitcoin.it/wiki/Difficulty">Bitcoin difficulty</a></p>
