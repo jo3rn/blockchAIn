@@ -20,7 +20,7 @@ public class Block {
     this.hash = calculateHash();
   }
 
-  private String calculateHash() {
+  public String calculateHash() {
     return Utils.getSha3256Hash(
         examAttendance.toString()
             + previousHash
@@ -41,6 +41,10 @@ public class Block {
 
   public String getHash() {
     return this.hash;
+  }
+
+  public String getPreviousHash() {
+    return this.previousHash;
   }
 
   @Override

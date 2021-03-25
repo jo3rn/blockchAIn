@@ -35,6 +35,8 @@ Immutability is achieved by linking entries together (it is a _chain_ after all)
 One feature of it is requesting one's grades.
 We will create a blockchain that securely stores read-only grades of students and call it the horstlChain.
 We instantiate objects of the class `ExamAttendance` as our data points.
+To avoid thinking up exam results every time we want to create an instance of `ExamAttendance`,
+we instead call the static method `getRandomAttendance` that creates random objects of this class.
 
 ## A closer look at blocks
 [Course video in German](https://www.youtube.com/watch?v=DVfkBAK8Rl4) (~14min)
@@ -116,32 +118,13 @@ Don't worry if you don't fully get what is happening here.
 It will be explained below.
 
 ```java
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-
 public class Utils {
   public static String getSha3256Hash(String originalString) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-      byte[] encodedHash = digest.digest(
-          originalString.getBytes(StandardCharsets.UTF_8));
-      return bytesToHex(encodedHash);
-
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException();
-    }
+    /* ... */
   }
 
   private static String bytesToHex(byte[] hash) {
-    StringBuilder hexString = new StringBuilder(2 * hash.length);
-    for (int i = 0; i < hash.length; i++) {
-      String hex = Integer.toHexString(0xff & hash[i]);
-      if(hex.length() == 1) {
-        hexString.append('0');
-      }
-      hexString.append(hex);
-    }
-    return hexString.toString();
+    /* ... */
   }
 }
 ```
@@ -199,9 +182,13 @@ The `horstlChain` array stores the blocks.
 When we give birth to our blockchain by calling the constructor, we initialize the array with a length and put the first (genesis) block into the array:
 
 ```java
-public HorstlChain(ExamAttendance examAttendance) {
-  horstlChain = new Block[100];
-  horstlChain[0] = new Block(examAttendance, "genesis");
+public class HorstlChain {
+  /* ... */
+  public HorstlChain(ExamAttendance examAttendance) {
+    horstlChain = new Block[100];
+    horstlChain[0] = new Block(examAttendance, "genesis");
+  }
+  /* ... */
 }
 ```
 
@@ -212,12 +199,67 @@ Afterwards we can add further blocks with the `addBlock` method.
 Here we retrieve the hash of the latest block to use it as the `previousHash`.
 
 ```java
-private void addBlock(ExamAttendance examAttendance) {
+public class HorstlChain {
+  /* ... */
+  private void addBlock(ExamAttendance examAttendance) {
     String previousHash = horstlChain[currentIndex].getHash();
     horstlChain[++currentIndex] = new Block(examAttendance, previousHash);
   }
+  /* ... */
+}
 ```
 
 So far we have only done simple array manipulations.
 No trace of the promises of blockchain technology: easy to verify but difficult to change.
 Remember the hashes? Now it is their time to shine.
+
+## Checking the integrity
+![A wedding proposal but instead of a ring there is a "verify check" in the box](https://media.giphy.com/media/l1KdaGQrZ2rKkLd4c/giphy.gif)
+
+[Course video in German](https://www.youtube.com/watch?v=xrVeP2JAXBc) (~15min)
+
+As we don't want to trust blindly, we verify with `isValid()` that everything has been stored correctly.
+This method iteratively grabs two adjacent blocks and runs checks on them.
+
+```java
+public class HorstlChain {
+  /* ... */
+  private boolean isValid() {
+    Block currentBlock;
+    Block previousBlock;
+
+    int i = 1;
+    while (i <= currentIndex) {
+      currentBlock = horstlChain[i];
+      previousBlock = horstlChain[i - 1];
+
+      // stored hash does not equal calculated hash
+      if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
+        return false;
+      }
+
+      // stored previousHash does not equal actual previous hash
+      if (!currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
+        return false;
+      }
+
+      i++;
+    }
+    
+    return true;
+  }
+  /* ... */
+}
+```
+
+There are several ways an ill-intentioned individual could tamper our chain. Let's consider these two:
+1. **change the `ExamAttendance` object in a `Block` without changing the `hash`**    
+   It is highly unlikely that with a different `ExamAttendance` object the hash function produces the same `hash` as before the alteration.
+   To check the integrity, we recalculate the `hash` of the `Block` and look if the new result is identical to the already stored `hash`.
+2. **completely replace a `Block` with a different one**    
+   In this case, the culprit would do well to include the `hash` of the predecessor as the `previousHash` in the new block.
+   Regardless, the successor of the illegitimately added block still contains the `hash` of the original predecessor as its `previousHash`,
+   so this is what we check for in the second part of `isValid()`.
+   
+We can imagine more checks, e.g. trace if all timestamps are in chronological order or if a block's timestamp is earlier than the exam date etc.
+I leave that as an exercise to the reader.
