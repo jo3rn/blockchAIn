@@ -12,6 +12,21 @@
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+
+        <style>
+            .reveal .slides section .fragment.fade-in-then-out {
+    opacity: 0;
+    display: none; }
+.reveal .slides section .fragment.current-fragment {
+    opacity: 1;
+    display: inline; }
+            .green {
+                color: green;
+            }
+            .red {
+                color: red;
+            }
+        </style>
 	</head>
 	<body>
 		<div class="reveal">
@@ -189,6 +204,78 @@ May the force be with you! ->  Hashfunktion  ->  13bc8533
                     .
 					</code></pre>
 				</section>
+
+                <section>
+                    <h3>Attacke</h3>
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: 5 |   |Note: 3 |   |Note: 1 |
+|        |   |prev: ab|   |prev: ee|   |prev: xy|
+|hash: ab|---|hash: ee|---|hash: xy|---|hash: jk|
+|________|   |________|   |________|   |________|
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="green">5</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="green">ee</span>|   |prev: <span class="green">xy</span>|
+|hash: ab|---|hash: <span class="green">ee</span>|---|hash: <span class="green">xy</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                    </code></pre>
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="green">ee</span>|   |prev: <span class="green">xy</span>|
+|hash: ab|---|hash: <span class="green">ee</span>|---|hash: <span class="green">xy</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                 <span class="red">!!</span>
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="green">ee</span>|   |prev: <span class="green">xy</span>|
+|hash: ab|---|hash: <span class="red">ff</span>|---|hash: <span class="green">xy</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                <span class="red">!!!!</span>
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="red">ff</span>|   |prev: <span class="green">xy</span>|
+|hash: ab|---|hash: <span class="red">ff</span>|---|hash: <span class="green">xy</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                              <span class="red">!!</span>
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="red">ff</span>|   |prev: <span class="green">xy</span>|
+|hash: ab|---|hash: <span class="red">ff</span>|---|hash: <span class="red">rp</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                             <span class="red">!!!!</span>
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="red">ff</span>|   |prev: <span class="red">rp</span>|
+|hash: ab|---|hash: <span class="red">ff</span>|---|hash: <span class="red">rp</span>|---|hash: <span class="green">jk</span>|
+|________|   |________|   |________|   |________|
+                                           <span class="red">!!</span>
+                    </code></pre>
+
+                    <pre class="fragment fade-in-then-out"><code class="nohighlight" data-noescape>
+__________   __________   __________   __________
+|Note: 2 |   |Note: <span class="red">1</span> |   |Note: <span class="green">3</span> |   |Note: <span class="green">1</span> |
+|        |   |prev: ab|   |prev: <span class="red">ff</span>|   |prev: <span class="red">rp</span>|
+|hash: ab|---|hash: <span class="red">ff</span>|---|hash: <span class="red">rp</span>|---|hash: <span class="red">zt</span>|
+|________|   |________|   |________|   |________|
+                                          <span class="red">!!!!</span>
+                    </code></pre>
+                </section>
 
                 <section>
                     <img src="https://live.staticflickr.com/59/155554663_96a19821d9_k.jpg" height="400" alt="Spam wall">
