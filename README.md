@@ -253,13 +253,86 @@ public class HorstlChain {
 ```
 
 There are several ways an ill-intentioned individual could tamper our chain. Let's consider these two:
-1. **change the `ExamAttendance` object in a `Block` without changing the `hash`**    
+1. **change the `ExamAttendance` object in a block without changing the block's `hash`**    
    It is highly unlikely that with a different `ExamAttendance` object the hash function produces the same `hash` as before the alteration.
-   To check the integrity, we recalculate the `hash` of the `Block` and look if the new result is identical to the already stored `hash`.
-2. **completely replace a `Block` with a different one**    
+   To check the integrity, we run the calculation of the block's `hash` again and look if the new result is identical to the already stored `hash`.
+2. **completely replace a block with a different one**    
    In this case, the culprit would do well to include the `hash` of the predecessor as the `previousHash` in the new block.
    Regardless, the successor of the illegitimately added block still contains the `hash` of the original predecessor as its `previousHash`,
    so this is what we check for in the second part of `isValid()`.
    
 We can imagine more checks, e.g. trace if all timestamps are in chronological order or if a block's timestamp is earlier than the exam date etc.
 I leave that as an exercise to the reader.
+
+## Proof of Work
+### Theory
+[Course video in German](https://www.youtube.com/watch?v=pQ3_S2tEUnw) (~12min)
+
+In a public blockchain, the data that is used to calculate the `hash` is visible for everyone.
+That's why a well-equipped hacker might still get away with fraudulently exchanging blocks.
+
+We visualize the attack with a blockchain of 4 blocks:
+```
+__________   __________   __________   __________
+|        |   |prev: ab|   |prev: ee|   |prev: xy|
+|hash: ab|---|hash: ee|---|hash: xy|---|hash: jk|
+|________|   |________|   |________|   |________|
+```
+The attacker changes the content of the second block, resulting in a new hash.
+```
+              changed
+__________   __________   __________   __________
+|        |   |prev: ab|   |prev: ee|   |prev: xy|
+|hash: ab|---|hash: ff|---|hash: xy|---|hash: jk|
+|________|   |________|   |________|   |________|
+```
+To not get detected, the attacker stores a new `previousHash` in the third block.
+As the `previousHash` is part of the calculated `hash`, the `hash` of the third block needs to change, too.
+```
+                           changed
+__________   __________   __________   __________
+|        |   |prev: ab|   |prev: ff|   |prev: xy|
+|hash: ab|---|hash: ff|---|hash: rp|---|hash: jk|
+|________|   |________|   |________|   |________|
+```
+This procedure continues until the last block in the chain is reached.
+```
+                                        changed
+__________   __________   __________   __________
+|        |   |prev: ab|   |prev: ff|   |prev: rp|
+|hash: ab|---|hash: ff|---|hash: rp|---|hash: zt|
+|________|   |________|   |________|   |________|
+```
+If we examine our chain now, everything looks innocent, although the second block's content has changed.
+
+So the attacker "simply" has to recalculate all the hashes that follow the manipulated block.
+Depending on the chain's length and the position of the targeted block this might take a while,
+but it is still somehow doable.
+We need a mechanism that turns _somehow doable_ into _highly impractical_. Introducing: **Proof of Work**.
+
+[Proof of Work](https://en.wikipedia.org/wiki/Proof_of_work) means it is easily recognizable that you have put effort into something.
+Imagine, before attaching a new block to the blockchain you would need to solve a Sudoku puzzle.
+For each block you need to spend some time.
+If an attacker now tries to change one block and reassign all following blocks,
+there would be a lot of puzzles to solve...
+
+In reality, there are no Sudokus involved.
+Instead, the hashes serve as a (not so entertaining) puzzle.
+The rule: a hash must comply with a certain characteristic, otherwise it is treated as invalid.
+Let's say all hashes need to start with six zeroes, e.g. `000000a44b24323cdd3`.
+If our hash does not comply, we need to generate new hashes, until we find one that adheres to the rule.
+
+> Wait a minute. Hashes are based on the input to the hash function.
+> In order to generate a different hash we would have to change the input.
+
+Exactly.
+But we don't want to change the `timestamp` nor the `previousHash` nor the data we would like to store.
+These are fixed.
+Therefore, we add another element to the input.
+We call it [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce).
+We then modify this element until we find a matching hash.
+The nonce could be a number that we increment by 1 with each hash calculation.
+
+Finding a solution to this hash puzzle will take a considerable amount of time (depending on the rules for the hash),
+because the only known way at the moment is by [brute force searching](https://en.wikipedia.org/wiki/Brute-force_search) for a solution,
+i.e. trying out all the possibilities.
