@@ -3,6 +3,7 @@ import java.time.LocalDate;
 public class HorstlChain {
   private Block[] horstlChain;
   private int currentIndex = 0;
+  private String difficulty = "00000";
 
   public HorstlChain(ExamAttendance examAttendance) {
     horstlChain = new Block[100];
@@ -10,8 +11,14 @@ public class HorstlChain {
   }
 
   private void addBlock(ExamAttendance examAttendance) {
-    String previousHash = horstlChain[currentIndex].getHash();
-    horstlChain[++currentIndex] = new Block(examAttendance, previousHash);
+    if (currentIndex < horstlChain.length - 1) {
+      String previousHash = horstlChain[currentIndex].getHash();
+      Block blockToAdd = new Block(examAttendance, previousHash);
+      System.out.println("Block mined with hash: " + blockToAdd.mineBlock(difficulty));
+      horstlChain[++currentIndex] = blockToAdd;
+    } else {
+      System.out.println("Chain is full.");
+    }
   }
 
   private boolean isValid() {

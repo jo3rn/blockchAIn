@@ -5,9 +5,10 @@ import java.time.format.DateTimeFormatter;
 
 public class Block {
   private ExamAttendance examAttendance;
-  private String hash; // fingerprint
+  private String hash;
   private String previousHash;
-  private String timestamp; // "2021.02.20-11:00:00"
+  private String timestamp;
+  private int nonce = Integer.MIN_VALUE;
 
   public Block(ExamAttendance examAttendance, String previousHash) {
     this.examAttendance = examAttendance;
@@ -24,19 +25,17 @@ public class Block {
     return Utils.getSha3256Hash(
         examAttendance.toString()
             + previousHash
-            + timestamp);
+            + timestamp
+            + nonce);
   }
 
-  public static void main(String[] args) {
-    ExamAttendance examAttendance = new ExamAttendance(
-        123456,
-        "Programmierung 1",
-        2.7,
-        LocalDate.of(2021, 2, 20)
-    );
-
-    Block block = new Block(examAttendance, "previousHash");
-    System.out.println(block);
+  public String mineBlock(String difficulty) {
+    while (!this.hash.startsWith(difficulty)) {
+      nonce++;
+      this.hash = calculateHash();
+    }
+    System.out.println("used nonce: " + this.nonce);
+    return this.hash;
   }
 
   public String getHash() {

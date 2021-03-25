@@ -265,7 +265,7 @@ We can imagine more checks, e.g. trace if all timestamps are in chronological or
 I leave that as an exercise to the reader.
 
 ## Proof of Work
-### Theory
+### Theory...
 [Course video in German](https://www.youtube.com/watch?v=pQ3_S2tEUnw) (~12min)
 
 In a public blockchain, the data that is used to calculate the `hash` is visible for everyone.
@@ -336,3 +336,6 @@ The nonce could be a number that we increment by 1 with each hash calculation.
 Finding a solution to this hash puzzle will take a considerable amount of time (depending on the rules for the hash),
 because the only known way at the moment is by [brute force searching](https://en.wikipedia.org/wiki/Brute-force_search) for a solution,
 i.e. trying out all the possibilities.
+
+### ...and practice
+[Course video in German](https://www.youtube.com/watch?v=rBRNBCjakAo) (~12min)

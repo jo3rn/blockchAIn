@@ -27,17 +27,6 @@ public class ExamAttendance {
         '}';
   }
 
-  public static void main(String[] args) {
-    ExamAttendance examAttendance = new ExamAttendance(
-        123456,
-        "Programmierung 1",
-        2.7,
-        LocalDate.of(2021, 2, 20)
-    );
-
-    System.out.println(examAttendance);
-  }
-
   public static ExamAttendance getRandomAttendance() {
     int lowerBound = 100000;
     int upperBound = 9999999;
