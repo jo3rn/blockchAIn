@@ -18,7 +18,7 @@ Before we build, we shall know what to build.
 
 [Course video in German](https://www.youtube.com/watch?v=6yd4sWluHck) (~9min)
 
-Hearing about *blockchain* probably triggers [bitcoin](https://github.com/bitcoin/bitcoin) somewhere else in the brain.
+Hearing about *blockchain* probably triggers [bitcoin](https://en.wikipedia.org/wiki/Bitcoin) somewhere else in the brain.
 Rightfully so, as it is a striking example of a blockchain's possibilities.
 Instead of the course video you can also watch this to get an impression: [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) (~27min)
 or read [this paper](https://bitcoin.org/bitcoin.pdf) by the "founder" of bitcoin.
@@ -339,3 +339,68 @@ i.e. trying out all the possibilities.
 
 ### ...and practice
 [Course video in German](https://www.youtube.com/watch?v=rBRNBCjakAo) (~12min)
+
+We add the discussed nonce as another attribute of `Block`.
+```java
+public class Block {
+   /* ... */
+   int nonce = Integer.MIN_VALUE;
+   /* ... */
+}
+```
+`nonce` is initialized with the lowest available value, so that we can count up as often as possible.
+
+The `difficulty` is controlled by the `HorstlChain` class.
+To see an effect during hash calculation while also not waiting forever I settled with five zeroes.
+
+```java
+public class HorstlChain {
+   /* ... */
+   private String difficulty = "00000";
+   /* ... */
+}
+```
+
+Now we are ready to mine blocks.
+The associated method resides in `Block`, so that we can call it on each `Block` object.
+If the current hash does not have the required number of leading zeroes, it calculates a new hash with a different `nonce`.
+> If we are very lucky, we get a suitable hash with the first hash calculation in the `Block` constructor.
+> But the probability of it decreases exponentially with each additional zero.
+> Find out more about it [here](https://en.bitcoin.it/wiki/Difficulty).
+
+```java
+public class Block {
+   /* ... */
+   public String mineBlock(String difficulty) {
+      while (!this.hash.startsWith(difficulty)) {
+         nonce++;
+         this.hash = calculateHash();
+      }
+      return this.hash;
+   }
+   /* ... */
+}
+```
+
+Back in the chain we need to adjust our `addBlock` method to make sure we have a valid block before adding it to the chain.
+```java
+public class HorstlChain {
+   /* ... */
+   private void addBlock(ExamAttendance examAttendance) {
+     String previousHash = horstlChain[currentIndex].getHash();
+     Block blockToAdd = new Block(examAttendance, previousHash);
+     blockToAdd.mineBlock(difficulty);
+     horstlChain[++currentIndex] = blockToAdd;
+   }
+   /* ... */
+}
+```
+
+![A girl asking another girl: "Are we done? Because I have Chipotle I need to eat it"](https://media.giphy.com/media/bq6EnG7Ub6M00/giphy.gif)
+
+Yes, we are done!
+We have achieved what we set out to do.
+Of course, this is just the beginning.
+It takes one look at the incredible size of [bitcoin's source code](https://github.com/bitcoin/bitcoin) to set our sights low.
+Nevertheless, we got off to a good start.
+And now try to add your own ideas to the `horstlChain`.
