@@ -5,9 +5,33 @@ public class HorstlChain {
   private int currentIndex = 0;
   private String difficulty = "00000";
 
-  public HorstlChain(ExamAttendance examAttendance) {
+  public HorstlChain(ExamAttendance genesisExamAttendance) {
     horstlChain = new Block[100];
-    horstlChain[0] = new Block(examAttendance, "genesis");
+    horstlChain[0] = new Block(genesisExamAttendance, "genesis");
+  }
+
+  public static void main(String[] args) {
+    ExamAttendance genesisExamAttendance = new ExamAttendance(
+        123456,
+        "Programmierung 1",
+        2.7,
+        LocalDate.of(2021, 2, 20)
+    );
+
+    HorstlChain chain = new HorstlChain(genesisExamAttendance);
+
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addBlock(ExamAttendance.getRandomAttendance());
+
+    System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
+
+    chain.corruptChain();
+    System.out.println(chain);
+    System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
   }
 
   private void addBlock(ExamAttendance examAttendance) {
@@ -45,7 +69,6 @@ public class HorstlChain {
       i++;
     }
 
-    System.out.println("Chain is valid.");
     return true;
   }
 
@@ -55,30 +78,6 @@ public class HorstlChain {
         ExamAttendance.getRandomAttendance(),
         horstlChain[blockToCorrupt - 1].getHash());
     System.out.println("Block " + blockToCorrupt + " has been changed.");
-  }
-
-  public static void main(String[] args) {
-    ExamAttendance genesisExamAttendance = new ExamAttendance(
-        123456,
-        "Programmierung 1",
-        2.7,
-        LocalDate.of(2021, 2, 20)
-    );
-
-    HorstlChain chain = new HorstlChain(genesisExamAttendance);
-
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-
-    chain.isValid();
-
-    chain.corruptChain();
-    System.out.println(chain);
-    chain.isValid();
   }
 
   @Override

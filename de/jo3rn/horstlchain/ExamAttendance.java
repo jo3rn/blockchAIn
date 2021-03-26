@@ -17,16 +17,6 @@ public class ExamAttendance {
     this.examDate = examDate;
   }
 
-  @Override
-  public String toString() {
-    return "ExamAttendance{" +
-        "matriculationNumber=" + matriculationNumber +
-        ", moduleTitle='" + moduleTitle + '\'' +
-        ", grade=" + grade +
-        ", examDate=" + examDate +
-        '}';
-  }
-
   public static ExamAttendance getRandomAttendance() {
     int lowerBound = 100000;
     int upperBound = 9999999;
@@ -39,5 +29,14 @@ public class ExamAttendance {
     double randomGrade = grades[(int) (Math.random() * grades.length)];
 
     return new ExamAttendance(randomMatriculation, randomModule, randomGrade, LocalDate.now());
+  }
+
+  @Override
+  public String toString() {
+    return "ExamAttendance: "
+        + "matriculationNumber=" + matriculationNumber
+        + ", moduleTitle='" + moduleTitle + '\''
+        + ", grade=" + grade
+        + ", examDate=" + examDate;
   }
 }

@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,6 @@ public class Block {
       nonce++;
       this.hash = calculateHash();
     }
-    System.out.println("used nonce: " + this.nonce);
     return this.hash;
   }
 
@@ -48,11 +46,11 @@ public class Block {
 
   @Override
   public String toString() {
-    return "Block{" +
-        "examAttendance=" + examAttendance +
-        "\nhash='" + hash + '\'' +
-        "\npreviousHash='" + previousHash + '\'' +
-        "\ntimestamp='" + timestamp + '\'' +
-        '}';
+    return "Block:"
+        + "\nexamAttendance=" + examAttendance
+        + "\nhash='" + hash + '\''
+        + "\npreviousHash='" + previousHash + '\''
+        + "\ntimestamp='" + timestamp + '\''
+        + "\nnonce='" + nonce + '\'';
   }
 }
