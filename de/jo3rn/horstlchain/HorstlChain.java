@@ -67,6 +67,7 @@ public class HorstlChain {
       }
       if(!currentBlock.getHash().startsWith(difficulty)) {
         System.out.println("Difficulty doesn't match on pos " + i);
+        System.out.println("The difficulty was: " + difficulty);
         return false;
       }
 
