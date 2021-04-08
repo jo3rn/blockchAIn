@@ -1,5 +1,3 @@
-import org.w3c.dom.CDATASection;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +15,7 @@ public class Block {
 
     this.timestamp = ZonedDateTime
         .now(ZoneId.of("Europe/Paris"))
-        .format(DateTimeFormatter.ofPattern("uuuu.MM.dd-HH:mm:ss'(der 'D'. Tag des Jahres)'"));
+        .format(DateTimeFormatter.ofPattern("uuuu.MM.dd-HH:mm:ss' (der 'D'. Tag des Jahres)'"));
 
     this.hash = calculateHash();
   }
