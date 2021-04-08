@@ -36,7 +36,7 @@ public class HorstlChain {
     System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
   }
 
-  private void addBlock(ExamAttendance examAttendance) {
+  public void addBlock(ExamAttendance examAttendance) {
     if (currentIndex < horstlChain.length - 1) {
       String previousHash = horstlChain[currentIndex].getHash();
       Block blockToAdd = new Block(examAttendance, previousHash);
