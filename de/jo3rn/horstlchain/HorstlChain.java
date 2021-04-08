@@ -1,5 +1,7 @@
 package de.jo3rn.horstlchain;
 
+import de.jo3rn.horstlchain.gui.ChainForm;
+
 import java.time.LocalDate;
 
 public class HorstlChain {
@@ -22,18 +24,7 @@ public class HorstlChain {
 
     HorstlChain chain = new HorstlChain(genesisExamAttendance);
 
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-
-    System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
-
-    chain.corruptChain();
-    System.out.println(chain);
-    System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
+    ChainForm.createGui(chain);
   }
 
   public void addBlock(ExamAttendance examAttendance) {
