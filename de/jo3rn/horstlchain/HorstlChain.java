@@ -74,7 +74,7 @@ public class HorstlChain {
     }
   }
 
-  private boolean isValid() {
+  public boolean isValid() {
     Block currentBlock;
     Block previousBlock;
 
