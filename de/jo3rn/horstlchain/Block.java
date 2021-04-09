@@ -17,7 +17,7 @@ public class Block {
 
     this.timestamp = ZonedDateTime
         .now(ZoneId.of("Europe/Paris"))
-        .format(DateTimeFormatter.ofPattern("uuuu.MM.dd-HH:mm:ss"));
+        .format(DateTimeFormatter.ofPattern("uuuu.MM.dd-HH:mm:ss' (der 'D'. Tag des Jahres)'"));
 
     this.hash = calculateHash();
   }
