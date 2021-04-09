@@ -17,7 +17,10 @@ public class HorstlChain {
   public static void main(String[] args) {
     Exam genesisExam = new Exam("Programmierung 1", LocalDate.of(2021, 2, 20), new ExamAttendance[0]);
     HorstlChain chain = new HorstlChain(genesisExam);
-    chain.addRandomBlocks(chain, 6);
+
+    chain.corruptChain();
+
+    chain.addRandomBlocks(6);
 
     chain.printExamsForModule("Prog1");
 
@@ -103,12 +106,16 @@ public class HorstlChain {
     return true;
   }
 
-  private void corruptChain() {
-    int blockToCorrupt = currentIndex - 2;
-    horstlChain[blockToCorrupt] = new Block(
-        Exam.getRandomExam(),
-        horstlChain[blockToCorrupt - 1].getHash());
-    System.out.println("Block " + blockToCorrupt + " has been changed.");
+  public void corruptChain() {
+    if (currentIndex < 1) {
+      System.out.println("Chain needs to have at least 2 blocks to be corrupted.");
+    } else {
+      /* block to corrupt should be between the second and the last block in the chain */
+      int randomIndex = (int) (Math.random() * (currentIndex - 1) + 1);
+      Block corruptBlock = new Block(Exam.getRandomExam(), horstlChain[randomIndex - 1].getHash());
+      horstlChain[randomIndex] = corruptBlock;
+      System.out.println("Block " + randomIndex + " has been corrupted.");
+    }
   }
 
   @Override
