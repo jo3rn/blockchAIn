@@ -68,9 +68,9 @@ public class HorstlChain {
     }
   }
 
-  public void addRandomBlocks(HorstlChain chain, int amount) {
+  public void addRandomBlocks(int amount) {
     for (int i = 1; i <= amount; i++) {
-      chain.addBlock(Exam.getRandomExam());
+      this.addBlock(Exam.getRandomExam());
     }
   }
 
