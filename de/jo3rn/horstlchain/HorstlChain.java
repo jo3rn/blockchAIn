@@ -1,12 +1,13 @@
 import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class HorstlChain {
   private Block[] horstlChain;
   private int currentIndex = 0;
   private String difficulty = "00000";
   // to adjust the length of chain change amount to desired amount (first element is Block 0)
-  private int amount = 5;
+  private static int amount;
 
   public HorstlChain(ExamAttendance genesisExamAttendance) {
     horstlChain = new Block[amount];
@@ -20,6 +21,10 @@ public class HorstlChain {
         2.7,
         LocalDate.of(2021, 2, 20)
     );
+    Scanner in = new Scanner(System.in);
+    System.out.print("Blocks to generate: ");
+    amount = in.nextInt();
+
 
     HorstlChain chain = new HorstlChain(genesisExamAttendance);
 
