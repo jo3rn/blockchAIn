@@ -22,12 +22,7 @@ public class HorstlChain {
 
     HorstlChain chain = new HorstlChain(genesisExamAttendance);
 
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
-    chain.addBlock(ExamAttendance.getRandomAttendance());
+    chain.addRandomBlocks(chain, 6);
 
     System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
 
@@ -44,6 +39,12 @@ public class HorstlChain {
       horstlChain[++currentIndex] = blockToAdd;
     } else {
       System.out.println("Chain is full.");
+    }
+  }
+
+  public void addRandomBlocks(HorstlChain chain, int amount) {
+    for (int i = 1; i <= amount; i++) {
+      chain.addBlock(ExamAttendance.getRandomAttendance());
     }
   }
 
