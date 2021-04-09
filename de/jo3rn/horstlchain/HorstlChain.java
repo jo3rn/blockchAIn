@@ -32,14 +32,23 @@ public class HorstlChain {
   }
 
   private void addBlock(ExamAttendance examAttendance) {
-    if (currentIndex < horstlChain.length - 1) {
-      String previousHash = horstlChain[currentIndex].getHash();
-      Block blockToAdd = new Block(examAttendance, previousHash);
-      System.out.println("Block mined with hash: " + blockToAdd.mineBlock(difficulty));
-      horstlChain[++currentIndex] = blockToAdd;
-    } else {
-      System.out.println("Chain is full.");
+    if (currentIndex >= horstlChain.length - 1) {
+      extendChain();
     }
+
+    String previousHash = horstlChain[currentIndex].getHash();
+    Block blockToAdd = new Block(examAttendance, previousHash);
+    System.out.println("Block mined with hash: " + blockToAdd.mineBlock(difficulty));
+    horstlChain[++currentIndex] = blockToAdd;
+  }
+
+  private void extendChain() {
+    System.out.println("Chain is full, extending chain...");
+    Block[] horstlChainNew = new Block[horstlChain.length + 100];
+    for (int i = 0; i < horstlChain.length; i++) {
+      horstlChainNew[i] = horstlChain[i];
+    }
+    horstlChain = horstlChainNew;
   }
 
   public void addRandomBlocks(HorstlChain chain, int amount) {
