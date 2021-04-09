@@ -1,17 +1,17 @@
 package de.jo3rn.horstlchain.gui;
 
-import de.jo3rn.horstlchain.ExamAttendance;
+import de.jo3rn.horstlchain.Exam;
 import de.jo3rn.horstlchain.HorstlChain;
 
 import javax.swing.SwingWorker;
 
 public class AddBlockTask extends SwingWorker<Void, Void> {
 
-  private final ExamAttendance examAttendance;
+  private final Exam exam;
   private final HorstlChain chain;
 
-  public AddBlockTask(ExamAttendance examAttendance, HorstlChain horstlChain) {
-    this.examAttendance = examAttendance;
+  public AddBlockTask(Exam exam, HorstlChain horstlChain) {
+    this.exam = exam;
     this.chain = horstlChain;
   }
 
@@ -20,7 +20,7 @@ public class AddBlockTask extends SwingWorker<Void, Void> {
    */
   @Override
   protected Void doInBackground() throws Exception {
-    chain.addBlock(examAttendance);
+    chain.addBlock(exam);
     return null;
   }
 }
