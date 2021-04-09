@@ -27,6 +27,10 @@ public class Exam {
     return new Exam(randomModuleTitel, LocalDate.now(), examAttendances);
   }
 
+  public String getModuleTitle() {
+    return moduleTitle;
+  }
+
   @Override
   public String toString() {
     return "Exam{" +

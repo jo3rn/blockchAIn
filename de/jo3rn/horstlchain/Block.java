@@ -46,6 +46,10 @@ public class Block {
     return this.previousHash;
   }
 
+  public Exam getExam() {
+    return this.exam;
+  }
+
   @Override
   public String toString() {
     return "Block:"

@@ -22,6 +22,8 @@ public class HorstlChain {
 
     chain.addRandomBlocks(chain, 6);
 
+    chain.printExamsForModule("Prog1");
+
     System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
 
     chain.corruptChain();
@@ -47,6 +49,24 @@ public class HorstlChain {
       horstlChainNew[i] = horstlChain[i];
     }
     horstlChain = horstlChainNew;
+  }
+
+  public void printExamsForModule(String moduleTitle) {
+    System.out.println("Searching for exams of " + moduleTitle);
+    int found = 0;
+    for (int i = 0; i < currentIndex; i++) {
+      Exam currentExam = horstlChain[i].getExam();
+      if (currentExam.getModuleTitle().equals(moduleTitle)) {
+        found++;
+        System.out.println(currentExam);
+      }
+    }
+
+    if (found == 0) {
+      System.out.println("No exam found for " + moduleTitle);
+    } else {
+      System.out.println("Found " + found + " exams for " + moduleTitle);
+    }
   }
 
   public void addRandomBlocks(HorstlChain chain, int amount) {
