@@ -19,11 +19,26 @@ public class ChainForm extends JFrame {
   private JTextField txtExamDateDay;
   private JTextField txtExamDateMonth;
   private JTextField txtExamDateYear;
+  private JLabel txtChainValidity;
   private JButton btnAddBlock;
   private JProgressBar prgAddBlock;
   private JTextPane txpChain;
 
   private final HorstlChain chain;
+
+  private final ActionListener btnCheckValidityActionListener = e -> setValidityText();
+
+  private final ActionListener btnCorruptChainActionListener = new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      if (null != chain) {
+        chain.corruptChain();
+        txpChain.setText(chain.toString());
+      } else {
+        System.out.println("Chain has not been initialized.");
+      }
+    }
+  };
 
   private final ActionListener btnAddBlockActionListener = e -> runAddBlockTask();
 
@@ -70,6 +85,7 @@ public class ChainForm extends JFrame {
     addBlockTask.addPropertyChangeListener(evt -> {
       if (evt.getPropertyName().equals("state") && evt.getNewValue().equals(SwingWorker.StateValue.DONE)) {
         setMiningUi(false);
+        setValidityText();
         txpChain.setText(chain.toString());
       }
     });
@@ -87,6 +103,14 @@ public class ChainForm extends JFrame {
       prgAddBlock.setIndeterminate(false);
       prgAddBlock.setString("No block is being mined.");
       this.mainPanel.setCursor(Cursor.getDefaultCursor());
+    }
+  }
+
+  private void setValidityText() {
+    if (chain.isValid()) {
+      txtChainValidity.setText("Chain ist valide!");
+    } else {
+      txtChainValidity.setText("Achtung: Chain ist nicht valide!");
     }
   }
 
@@ -191,6 +215,30 @@ public class ChainForm extends JFrame {
     // FIFTH ROW
     c.gridy = 4;
     c.gridx = 0;
+    c.gridwidth = 3;
+    JButton btnCheckValidity = new JButton("Horstlchain überprüfen");
+    c.insets = new Insets(0, 10, 10, 10);
+    pane.add(btnCheckValidity, c);
+    btnCheckValidity.addActionListener(btnCheckValidityActionListener);
+
+    c.gridx = 3;
+    c.gridwidth = 3;
+    txtChainValidity = new JLabel("Status unbekannt", SwingConstants.CENTER);
+    pane.add(txtChainValidity, c);
+
+    // SIXTH ROW
+    c.gridy = 5;
+    c.gridx = 0;
+    c.gridwidth = 6;
+
+    JButton btnCorruptChain = new JButton("Horstlchain korrumpieren");
+    c.insets = new Insets(0, 10, 10, 10);
+    pane.add(btnCorruptChain, c);
+    btnCorruptChain.addActionListener(btnCorruptChainActionListener);
+
+    // SEVENTH ROW
+    c.gridy = 6;
+    c.gridx = 0;
 
     JButton btnShowChain = new JButton("Horstlchain anzeigen");
     c.weightx = 1.0;
@@ -198,8 +246,8 @@ public class ChainForm extends JFrame {
     pane.add(btnShowChain, c);
     btnShowChain.addActionListener(btnShowChainActionListener);
 
-    // SIXTH ROW
-    c.gridy = 5;
+    // EIGHTH ROW
+    c.gridy = 7;
     c.gridx = 0;
     c.weighty = 1;
     c.weightx = 1;
