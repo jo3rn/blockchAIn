@@ -5,14 +5,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Block {
-  private ExamAttendance examAttendance;
+  private Exam exam;
   private String hash;
   private String previousHash;
   private String timestamp;
   private int nonce = Integer.MIN_VALUE;
 
-  public Block(ExamAttendance examAttendance, String previousHash) {
-    this.examAttendance = examAttendance;
+  public Block(Exam exam, String previousHash) {
+    this.exam = exam;
     this.previousHash = previousHash;
 
     this.timestamp = ZonedDateTime
@@ -24,7 +24,7 @@ public class Block {
 
   public String calculateHash() {
     return Utils.getSha3256Hash(
-        examAttendance.toString()
+        exam.toString()
             + previousHash
             + timestamp
             + nonce);
@@ -49,7 +49,7 @@ public class Block {
   @Override
   public String toString() {
     return "Block:"
-        + "\nexamAttendance=" + examAttendance
+        + "\nexam=" + exam
         + "\nhash='" + hash + '\''
         + "\npreviousHash='" + previousHash + '\''
         + "\ntimestamp='" + timestamp + '\''

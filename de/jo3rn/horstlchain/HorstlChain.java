@@ -5,22 +5,20 @@ import java.time.LocalDate;
 public class HorstlChain {
   private Block[] horstlChain;
   private int currentIndex = 0;
-  private String difficulty = "00000";
+  private String difficulty = "00";
 
-  public HorstlChain(ExamAttendance genesisExamAttendance) {
+  public HorstlChain(Exam genesisExam) {
     horstlChain = new Block[100];
-    horstlChain[0] = new Block(genesisExamAttendance, "genesis");
+    horstlChain[0] = new Block(genesisExam, "genesis");
   }
 
   public static void main(String[] args) {
-    ExamAttendance genesisExamAttendance = new ExamAttendance(
-        123456,
+    Exam genesisExam = new Exam(
         "Programmierung 1",
-        2.7,
-        LocalDate.of(2021, 2, 20)
-    );
+        LocalDate.of(2021, 2, 20),
+        new ExamAttendance[0]);
 
-    HorstlChain chain = new HorstlChain(genesisExamAttendance);
+    HorstlChain chain = new HorstlChain(genesisExam);
 
     chain.addRandomBlocks(chain, 6);
 
@@ -31,13 +29,13 @@ public class HorstlChain {
     System.out.println("Chain is " + (chain.isValid() ? "" : "not ") + "valid.");
   }
 
-  private void addBlock(ExamAttendance examAttendance) {
+  private void addBlock(Exam exam) {
     if (currentIndex >= horstlChain.length - 1) {
       extendChain();
     }
 
     String previousHash = horstlChain[currentIndex].getHash();
-    Block blockToAdd = new Block(examAttendance, previousHash);
+    Block blockToAdd = new Block(exam, previousHash);
     System.out.println("Block mined with hash: " + blockToAdd.mineBlock(difficulty));
     horstlChain[++currentIndex] = blockToAdd;
   }
@@ -53,7 +51,7 @@ public class HorstlChain {
 
   public void addRandomBlocks(HorstlChain chain, int amount) {
     for (int i = 1; i <= amount; i++) {
-      chain.addBlock(ExamAttendance.getRandomAttendance());
+      chain.addBlock(Exam.getRandomExam());
     }
   }
 
@@ -92,7 +90,7 @@ public class HorstlChain {
   private void corruptChain() {
     int blockToCorrupt = currentIndex - 2;
     horstlChain[blockToCorrupt] = new Block(
-        ExamAttendance.getRandomAttendance(),
+        Exam.getRandomExam(),
         horstlChain[blockToCorrupt - 1].getHash());
     System.out.println("Block " + blockToCorrupt + " has been changed.");
   }
