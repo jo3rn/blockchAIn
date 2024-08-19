@@ -1,7 +1,7 @@
 # Blockchain
 ## Introduction
 This course is targeted towards computer science students of the [University of Applied Sciences in Fulda](https://www.hs-fulda.de/), but you can still follow along if you are familiar with Java.
-There are accompanying videos in German: [YouTube Playlist](https://www.youtube.com/playlist?list=PLiisIVtqYuRuIy92gs0dpM-GginqDPvTM).
+There are accompanying videos in German on [PeerTube](https://tube.tchncs.de/w/p/fw7p2PZ3cWY4J6znLcmKAx) and [YouTube](https://www.youtube.com/playlist?list=PLiisIVtqYuRuIy92gs0dpM-GginqDPvTM).
 You can have a look at the slides used in the videos [here](https://jo3rn.github.io/blockchAIn/slides/).
 
 If you do not speak German: the important parts will be covered here in this README or with alternative resources.
@@ -16,7 +16,7 @@ However, we will learn a thing or two about real-world blockchains along the way
 
 Before we build, we shall know what to build.
 
-[Course video in German](https://www.youtube.com/watch?v=6yd4sWluHck) (~9min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/uWqVN44vDmqBH3sSXbdRrH), [YouTube](https://www.youtube.com/watch?v=6yd4sWluHck) (~9min)_
 
 Hearing about *blockchain* probably triggers [bitcoin](https://en.wikipedia.org/wiki/Bitcoin) somewhere else in the brain.
 Rightfully so, as it is a striking example of a blockchain's possibilities.
@@ -29,7 +29,7 @@ Apart from the actual data you care about, each entry has some additional inform
 Immutability is achieved by linking entries together (it is a _chain_ after all). _How?_ you might ask. Let's find out.
 
 ## The data we want to work with
-[Course video in German](https://www.youtube.com/watch?v=NGfzF-nG_H0) (~12min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/6cdrh4FBWA85wiPuZwzdW4), [YouTube](https://www.youtube.com/watch?v=NGfzF-nG_H0) (~12min)_
 
 [horstl](https://horstl.hs-fulda.de/) is the management system of Hochschule Fulda.
 One feature of it is requesting one's grades.
@@ -39,7 +39,7 @@ To avoid thinking up exam results every time we want to create an instance of `E
 we instead call the static method `getRandomAttendance` that creates random objects of this class.
 
 ## A closer look at blocks
-[Course video in German](https://www.youtube.com/watch?v=DVfkBAK8Rl4) (~14min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/kjW7Ca8r842yAakdR4ghyp), [YouTube](https://www.youtube.com/watch?v=DVfkBAK8Rl4) (~14min)_
 
 First, let us make things easier and only consider a single block.
 Think of it as one entry in the list of things we want to record.
@@ -73,7 +73,7 @@ Like we humans carry parts of our ancestors in us.
 What a beautiful thing.
 
 ## The blender
-[Course video in German](https://www.youtube.com/watch?v=aD9CSmltrIU) (~17min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/sPmkafkGmiirxC9bMZ8eqc), [YouTube](https://www.youtube.com/watch?v=aD9CSmltrIU) (~17min)_
 
 Obviously it is not a real blender that creates the `hash`.
 We rather rely on an ingenious cryptographic algorithm to produce a unique outcome.
@@ -161,7 +161,7 @@ public class Block {
 ```
 
 ## Connect the ~~dots~~ blocks
-[Course video in German](https://www.youtube.com/watch?v=4ltNm4nwyr8) (~15min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/iRNdiMobzovyhpjBn3hkGM), [YouTube](https://www.youtube.com/watch?v=4ltNm4nwyr8) (~15min)_
 
 It's time to get the ball rolling by building our chain.
 You might have guessed what that means.
@@ -216,7 +216,7 @@ Remember the hashes? Now it is their time to shine.
 ## Checking the integrity
 ![A wedding proposal but instead of a ring there is a "verify check" in the box](https://media.giphy.com/media/l1KdaGQrZ2rKkLd4c/giphy.gif)
 
-[Course video in German](https://www.youtube.com/watch?v=xrVeP2JAXBc) (~15min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/23sKumZbHPsDKg9uD9tpgt), [YouTube](https://www.youtube.com/watch?v=xrVeP2JAXBc) (~15min)_
 
 As we don't want to trust blindly, we verify with `isValid()` that everything has been stored correctly.
 This method iteratively grabs two adjacent blocks and runs checks on them.
@@ -266,7 +266,7 @@ I leave that as an exercise to the reader.
 
 ## Proof of Work
 ### Theory...
-[Course video in German](https://www.youtube.com/watch?v=pQ3_S2tEUnw) (~12min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/fPcM7eUReH7PPRd7MUbLgf), [YouTube](https://www.youtube.com/watch?v=pQ3_S2tEUnw) (~12min)_
 
 In a public blockchain, the data that is used to calculate the `hash` is visible for everyone.
 That's why a well-equipped hacker might still get away with fraudulently exchanging blocks.
@@ -338,7 +338,7 @@ because the only known way at the moment is by [brute force searching](https://e
 i.e. trying out all the possibilities.
 
 ### ...and practice
-[Course video in German](https://www.youtube.com/watch?v=rBRNBCjakAo) (~12min)
+_Course video in German: [PeerTube](https://tube.tchncs.de/w/uSLjFxqA6izdozVMuPLWSW), [YouTube](https://www.youtube.com/watch?v=rBRNBCjakAo) (~12min)_
 
 We add the discussed nonce as another attribute of `Block`.
 ```java
